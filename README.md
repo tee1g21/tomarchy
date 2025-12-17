@@ -1,0 +1,3 @@
+# Tomarchy 🍅
+
+### Wrapping DHH's opinion with my own
