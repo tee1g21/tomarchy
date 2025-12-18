@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# 1. Define your theme names (Match 'omarchy-theme-list' output exactly)
+LIGHT="Flexoki Light"
+DARK="Everforest"
+
+# 2. Use the native command to get the active theme name
+CURRENT=$(omarchy-theme-current)
+
+# 3. Toggle Logic
+if echo "$CURRENT" | grep -iqE "Light|Latte|Pine"; then
+    omarchy-theme-set "$DARK"
+else
+    omarchy-theme-set "$LIGHT"
+fi
