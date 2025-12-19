@@ -41,12 +41,31 @@ uninstall_custom_bindings() {
     fi
 }
 
+uninstall_custom_hyprlock() {
+    local target="$HOME/.config/hypr/hyprlock.conf"
+    local backup="$target.old"
+
+    echo "Reverting hyprlock.conf..."
+
+    # Remove the symlink
+    if [ -L "$target" ]; then
+        rm "$target"
+    fi
+
+    # Restore the backup if it exists
+    if [ -f "$backup" ]; then
+        mv "$backup" "$target"
+        echo "Restored original hyprlock.conf from backup."
+    fi
+}
+
 main() {
     echo "Starting Tomarchy uninstallation... 🍅"
 
     uninstall_menu_custom
     uninstall_theme_toggle
     uninstall_custom_bindings
+    uninstall_custom_hyprlock
 
     echo "Tomarchy uninstalled successfully."
 }
