@@ -57,6 +57,10 @@ uninstall_custom_hyprlock() {
         mv "$backup" "$target"
         echo "Restored original hyprlock.conf from backup."
     fi
+
+    # Remove weather-related files if present
+    rm -f "$HOME/.cache/tomarchy/hyprlock-weather"
+    rm -rf "$HOME/.local/bin/hyprlock-weather"
 }
 
 main() {
