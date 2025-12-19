@@ -44,6 +44,13 @@ install_custom_hyprlock() {
     fi
 
     ln -sf "$REPO_DIR/.config/hypr/hyprlock.conf" "$target"
+
+    # Link weather widget scrip to local bin
+    ln -sf "$REPO_DIR/.local/bin/hyprlock-weather" "$HOME/.local/bin/hyprlock-weather"
+
+    # clear weather cache
+    rm -rf "$HOME/.cache/tomarchy/hyprlock-weather"
+
 }
 
 main() { 
