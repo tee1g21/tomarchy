@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPO_DIR="$HOME/Repositories/tomarchy"
+REPO_DIR=$(git rev-parse --show-toplevel 2>/dev/null)
 
 install_menu_custom() {
     echo "Installing custom menu..."
