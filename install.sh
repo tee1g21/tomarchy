@@ -2,7 +2,7 @@
 
 REPO_DIR=$(git rev-parse --show-toplevel 2>/dev/null)
 
-install_menu_custom() {
+install_custom_menu() {
     echo "Installing custom menu..."
 
     ln -sf "$REPO_DIR/.local/bin/omarchy-menu-custom" "$HOME/.local/bin/omarchy-menu-custom"
@@ -53,13 +53,34 @@ install_custom_hyprlock() {
 
 }
 
+install_custom_walker() { 
+    echo "Installing custom walker..."
+    
+    mkdir -p "$HOME/.config/walker"
+
+    ln -sfn "$REPO_DIR/.config/walker/themes" "$HOME/.config/walker/themes"
+
+    local target="$HOME/.config/walker/config.toml"
+    local backup="$target.old"
+
+    if [ -f "$target" ] && [ ! -L "$target" ] && [ ! -f "$backup" ]; then
+        mv "$target" "$backup"
+        echo "Original walker config.toml backed up to .old"
+    elif [ -L "$target" ]; then
+        echo "Walker config is already a symlink, skipping backup."
+    fi
+
+    ln -sf "$REPO_DIR/.config/walker/config.toml" "$target"
+}
+
 main() { 
 mkdir -p "$HOME/.local/bin"
 
-install_menu_custom
+install_custom_menu
 install_theme_toggle
 install_custom_bindings
 install_custom_hyprlock
+install_custom_walker
 
 chmod +x "$HOME/.local/bin/"*
 

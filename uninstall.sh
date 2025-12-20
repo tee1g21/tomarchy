@@ -3,7 +3,7 @@
 REPO_DIR="$HOME/Repositories/tomarchy"
 
 
-uninstall_menu_custom() {
+uninstall_custom_menu() {
     local target="$HOME/.local/bin/omarchy-menu-custom"
     if [ -L "$target" ]; then
         echo "Removing custom menu link..."
@@ -59,17 +59,44 @@ uninstall_custom_hyprlock() {
     fi
 
     # Remove weather-related files if present
-    rm -f "$HOME/.cache/tomarchy/hyprlock-weather"
-    rm -rf "$HOME/.local/bin/hyprlock-weather"
+    rm -rf "$HOME/.cache/tomarchy/hyprlock-weather"
+    rm -f "$HOME/.local/bin/hyprlock-weather"
+}
+
+uninstall_custom_walker() {
+    echo "Uninstalling custom walker..."
+    
+    local target="$HOME/.config/walker/config.toml"
+    local themes="$HOME/.config/walker/themes"
+    local backup="$target.old"
+
+    # Remove the themes symlink
+    if [ -L "$themes" ]; then
+        rm "$themes"
+        echo "Removed themes symlink."
+    fi
+
+    # Handle the config.toml
+    if [ -L "$target" ]; then
+        rm "$target"
+        echo "Removed walker config.toml symlink."
+    fi
+
+    # Restore the backup
+    if [ -f "$backup" ]; then
+        mv "$backup" "$target"
+        echo "Restored original walker config.toml."
+    fi
 }
 
 main() {
     echo "Starting Tomarchy uninstallation... 🍅"
 
-    uninstall_menu_custom
+    uninstall_custom_menu
     uninstall_theme_toggle
     uninstall_custom_bindings
     uninstall_custom_hyprlock
+    uninstall_custom_walker
 
     echo "Tomarchy uninstalled successfully."
 }
