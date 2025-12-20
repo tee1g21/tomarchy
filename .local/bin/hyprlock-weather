@@ -32,7 +32,7 @@ if [ $((current_date - last_modified)) -lt $expiry_time ] && [ -s "$cache_file" 
     exit 0
 fi
 
-weather=$(curl -s -m 5 "wttr.in/${QUERY}?format=%c+%t" 2>/dev/null | sed 's/+//; s/  */  /g')
+weather=$(curl -s -m 10 "wttr.in/${QUERY}?format=%c+%t" 2>/dev/null | sed 's/+//; s/  */  /g')
 
 if [ -n "$weather" ]; then
     final_string="$NAME | $weather"
