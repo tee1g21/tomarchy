@@ -76,7 +76,7 @@ install_custom_walker() {
 main() { 
 mkdir -p "$HOME/.local/bin"
 
-install_custom_menu
+#install_custom_menu
 install_theme_toggle
 install_custom_bindings
 install_custom_hyprlock

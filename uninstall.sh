@@ -92,7 +92,7 @@ uninstall_custom_walker() {
 main() {
     echo "Starting Tomarchy uninstallation... 🍅"
 
-    uninstall_custom_menu
+    #uninstall_custom_menu
     uninstall_theme_toggle
     uninstall_custom_bindings
     uninstall_custom_hyprlock
