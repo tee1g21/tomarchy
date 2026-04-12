@@ -14,7 +14,7 @@ install_theme_toggle() {
     ln -sf "$REPO_DIR/.local/bin/omarchy-theme-toggle" "$HOME/.local/bin/omarchy-theme-toggle"
 }
 
-install_custom_bindings() { 
+install_custom_bindings() {
     echo "Installing custom bindings..."
 
     ln -sf "$REPO_DIR/.config/hypr/bindings.conf" "$HOME/.config/hypr/custom-bindings.conf"
@@ -53,9 +53,9 @@ install_custom_hyprlock() {
 
 }
 
-install_custom_walker() { 
+install_custom_walker() {
     echo "Installing custom walker..."
-    
+
     mkdir -p "$HOME/.config/walker"
 
     ln -sfn "$REPO_DIR/.config/walker/themes" "$HOME/.config/walker/themes"
@@ -73,7 +73,35 @@ install_custom_walker() {
     ln -sf "$REPO_DIR/.config/walker/config.toml" "$target"
 }
 
-main() { 
+install_custom_waybar() {
+    echo "Installing custom waybar..."
+
+    mkdir -p "$HOME/.config/waybar"
+    mkdir -p "$HOME/.local/bin"
+
+    local config_target="$HOME/.config/waybar/config.jsonc"
+    local config_backup="$HOME/.config/waybar/config.jsonc.bak"
+    local config_source="$REPO_DIR/.config/waybar/config.jsonc"
+
+    local brightness_target="$HOME/.local/bin/brightness-control.sh"
+    local brightness_source="$REPO_DIR/.local/bin/brightness-control.sh"
+
+    # Backup existing system config only if it's a real file and no backup exists yet
+    if [ -e "$config_target" ] && [ ! -L "$config_target" ] && [ ! -e "$config_backup" ]; then
+        mv "$config_target" "$config_backup"
+        echo "Original waybar config.jsonc backed up to config.jsonc.bak"
+    fi
+
+    # Replace existing symlink/file safely with the managed symlink
+    rm -f "$config_target"
+    ln -s "$config_source" "$config_target"
+
+    # Link only the latest brightness script
+    rm -f "$brightness_target"
+    ln -s "$brightness_source" "$brightness_target"
+}
+
+main() {
 mkdir -p "$HOME/.local/bin"
 
 #install_custom_menu
@@ -81,6 +109,7 @@ install_theme_toggle
 install_custom_bindings
 install_custom_hyprlock
 install_custom_walker
+install_custom_waybar
 
 chmod +x "$HOME/.local/bin/"*
 

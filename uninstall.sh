@@ -25,7 +25,7 @@ uninstall_custom_bindings() {
     local source_line="source = ~/.config/hypr/custom-bindings.conf"
 
     echo "Cleaning up custom bindings..."
-    
+
     # Remove the symlink
     if [ -L "$source_file" ]; then
         rm "$source_file"
@@ -35,7 +35,7 @@ uninstall_custom_bindings() {
     if [ -f "$target_file" ]; then
         # Use \| as a delimiter to avoid clashing with the / in the file path
         sed -i "\|$source_line|d" "$target_file"
-        
+
         # Optional: Remove trailing empty lines left behind
         sed -i '${/^$/d;}' "$target_file"
     fi
@@ -65,7 +65,7 @@ uninstall_custom_hyprlock() {
 
 uninstall_custom_walker() {
     echo "Uninstalling custom walker..."
-    
+
     local target="$HOME/.config/walker/config.toml"
     local themes="$HOME/.config/walker/themes"
     local backup="$target.old"
@@ -89,6 +89,32 @@ uninstall_custom_walker() {
     fi
 }
 
+uninstall_custom_waybar() {
+    echo "Uninstalling custom waybar..."
+
+    local config_target="$HOME/.config/waybar/config.jsonc"
+    local config_backup="$HOME/.config/waybar/config.jsonc.bak"
+    local brightness_target="$HOME/.local/bin/brightness-control.sh"
+
+    # Remove config symlink only if it is a symlink
+    if [ -L "$config_target" ]; then
+        rm "$config_target"
+        echo "Removed waybar config symlink."
+    fi
+
+    # Restore backup config if present and target is absent
+    if [ -e "$config_backup" ] && [ ! -e "$config_target" ]; then
+        mv "$config_backup" "$config_target"
+        echo "Restored original waybar config.jsonc from backup."
+    fi
+
+    # Remove brightness script symlink only if it is a symlink
+    if [ -L "$brightness_target" ]; then
+        rm "$brightness_target"
+        echo "Removed brightness-control.sh symlink."
+    fi
+}
+
 main() {
     echo "Starting Tomarchy uninstallation... 🍅"
 
@@ -97,6 +123,7 @@ main() {
     uninstall_custom_bindings
     uninstall_custom_hyprlock
     uninstall_custom_walker
+    uninstall_custom_waybar
 
     echo "Tomarchy uninstalled successfully."
 }
