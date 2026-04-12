@@ -83,8 +83,8 @@ install_custom_waybar() {
     local config_backup="$HOME/.config/waybar/config.jsonc.bak"
     local config_source="$REPO_DIR/.config/waybar/config.jsonc"
 
-    local brightness_target="$HOME/.local/bin/brightness-control.sh"
-    local brightness_source="$REPO_DIR/.local/bin/brightness-control.sh"
+    local brightness_target="$HOME/.local/bin/brightness-control"
+    local brightness_source="$REPO_DIR/.local/bin/brightness-control"
 
     # Backup existing system config only if it's a real file and no backup exists yet
     if [ -e "$config_target" ] && [ ! -L "$config_target" ] && [ ! -e "$config_backup" ]; then

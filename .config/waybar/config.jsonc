@@ -176,11 +176,11 @@
   "custom/brightness": {
     "format": "  {text}% ",
     "signal": 8,
-    "exec": "~/.local/bin/brightness-control.sh get",
-    "on-scroll-up": "~/.local/bin/brightness-control.sh up",
-    "on-scroll-down": "~/.local/bin/brightness-control.sh down",
-    "on-click": "~/.local/bin/brightness-control.sh left_click",
-    "on-click-right": "~/.local/bin/brightness-control.sh right_click",
+    "exec": "~/.local/bin/brightness-control get",
+    "on-scroll-up": "~/.local/bin/brightness-control up",
+    "on-scroll-down": "~/.local/bin/brightness-control down",
+    "on-click": "~/.local/bin/brightness-control left_click",
+    "on-click-right": "~/.local/bin/brightness-control right_click",
     "tooltip": false,
   },
 }

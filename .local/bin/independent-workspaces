@@ -1,0 +1,21 @@
+#!/bin/bash
+
+ACTION=$1
+NUM=$2
+
+# Ask Hyprland which monitor is currently active
+ACTIVE_MONITOR=$(hyprctl activeworkspace -j | jq -r '.monitor')
+
+# If we are on the left monitor, shift the requested number up by 5
+if [ "$ACTIVE_MONITOR" == "HDMI-A-1" ]; then
+    TARGET=$((NUM + 5))
+else
+    # Otherwise, just use 1-5
+    TARGET=$NUM
+fi
+
+if [ "$ACTION" == "switch" ]; then
+    hyprctl dispatch workspace $TARGET
+elif [ "$ACTION" == "move" ]; then
+    hyprctl dispatch movetoworkspace $TARGET
+fi
