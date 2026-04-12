@@ -94,7 +94,7 @@ uninstall_custom_waybar() {
 
     local config_target="$HOME/.config/waybar/config.jsonc"
     local config_backup="$HOME/.config/waybar/config.jsonc.bak"
-    local brightness_target="$HOME/.local/bin/brightness-control.sh"
+    local brightness_target="$HOME/.local/bin/brightness-control"
 
     # Remove config symlink only if it is a symlink
     if [ -L "$config_target" ]; then
@@ -111,7 +111,7 @@ uninstall_custom_waybar() {
     # Remove brightness script symlink only if it is a symlink
     if [ -L "$brightness_target" ]; then
         rm "$brightness_target"
-        echo "Removed brightness-control.sh symlink."
+        echo "Removed brightness-control symlink."
     fi
 }
 
