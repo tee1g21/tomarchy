@@ -56,7 +56,7 @@ elif [ "$ACTION" == "push-all" ]; then
     done
 
 # ==========================================
-# ACTION: PUSH ACTIVE HOVERED WINDOW ONLY
+# ACTION: PUSH ACTIVE HOVERED WINDOW & FOLLOW
 # ==========================================
 elif [ "$ACTION" == "push-active" ]; then
     DIR=$ARG
@@ -80,7 +80,11 @@ elif [ "$ACTION" == "push-active" ]; then
         exit 0
     fi
 
-    # Teleport JUST the hovered window silently so your mouse stays put
+    # Teleport the window to the other monitor
     hyprctl dispatch movetoworkspacesilent "$TARGET_WS,address:$ACTIVE_WIN"
+    
+    # Follow the window: Switch focus to the target monitor, then lock onto the window
+    hyprctl dispatch focusmonitor "$DIR"
+    hyprctl dispatch focuswindow address:"$ACTIVE_WIN"
 fi
 
