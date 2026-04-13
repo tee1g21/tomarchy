@@ -1,0 +1,86 @@
+#!/bin/bash
+
+ACTION=$1
+ARG=$2
+
+# Remember where the mouse is so we don't pull focus to the wrong screen
+ACTIVE_MONITOR=$(hyprctl activeworkspace -j | jq -r '.monitor')
+
+# ==========================================
+# ACTION: SPANNED DESKTOP (Switch / Move)
+# ==========================================
+if [ "$ACTION" == "switch" ] || [ "$ACTION" == "move" ] || [ "$ACTION" == "movesilent" ]; then
+    
+    WS_RIGHT=$ARG
+    WS_LEFT=$((ARG + 5))
+
+    if [ "$ACTION" == "switch" ]; then
+        # BATCH: Switch both and restore focus in one single atomic frame
+        hyprctl --batch "dispatch workspace $WS_LEFT ; dispatch workspace $WS_RIGHT ; dispatch focusmonitor $ACTIVE_MONITOR"
+
+    elif [ "$ACTION" == "move" ]; then
+        if [ "$ACTIVE_MONITOR" == "HDMI-A-1" ]; then
+            hyprctl --batch "dispatch movetoworkspace $WS_LEFT ; dispatch workspace $WS_RIGHT ; dispatch focusmonitor HDMI-A-1"
+        else
+            hyprctl --batch "dispatch movetoworkspace $WS_RIGHT ; dispatch workspace $WS_LEFT ; dispatch focusmonitor DP-1"
+        fi
+
+    elif [ "$ACTION" == "movesilent" ]; then
+        if [ "$ACTIVE_MONITOR" == "HDMI-A-1" ]; then
+            hyprctl dispatch movetoworkspacesilent $WS_LEFT
+        else
+            hyprctl dispatch movetoworkspacesilent $WS_RIGHT
+        fi
+    fi
+
+# ==========================================
+# ACTION: PUSH ALL WINDOWS TO ANOTHER MONITOR
+# ==========================================
+elif [ "$ACTION" == "push-all" ]; then
+    DIR=$ARG
+    SOURCE_WS=$(hyprctl activeworkspace -j | jq -r '.id')
+    SOURCE_MON=$ACTIVE_MONITOR
+
+    hyprctl dispatch focusmonitor "$DIR"
+    TARGET_WS=$(hyprctl activeworkspace -j | jq -r '.id')
+    TARGET_MON=$(hyprctl activeworkspace -j | jq -r '.monitor')
+    hyprctl dispatch focusmonitor "$SOURCE_MON"
+
+    if [ "$SOURCE_MON" == "$TARGET_MON" ]; then
+        exit 0
+    fi
+
+    WINDOWS=$(hyprctl clients -j | jq -r ".[] | select(.workspace.id == $SOURCE_WS) | .address")
+    for addr in $WINDOWS; do
+        hyprctl dispatch movetoworkspacesilent "$TARGET_WS,address:$addr"
+    done
+
+# ==========================================
+# ACTION: PUSH ACTIVE HOVERED WINDOW ONLY
+# ==========================================
+elif [ "$ACTION" == "push-active" ]; then
+    DIR=$ARG
+    SOURCE_MON=$ACTIVE_MONITOR
+    
+    # Grab the exact window your mouse is currently hovering over
+    ACTIVE_WIN=$(hyprctl activewindow -j | jq -r '.address')
+
+    # If your mouse is hovering over an empty desktop, do nothing
+    if [ "$ACTIVE_WIN" == "null" ] || [ -z "$ACTIVE_WIN" ]; then
+        exit 0
+    fi
+
+    # Find out what workspace is active on the other screen
+    hyprctl dispatch focusmonitor "$DIR"
+    TARGET_WS=$(hyprctl activeworkspace -j | jq -r '.id')
+    TARGET_MON=$(hyprctl activeworkspace -j | jq -r '.monitor')
+    hyprctl dispatch focusmonitor "$SOURCE_MON"
+
+    if [ "$SOURCE_MON" == "$TARGET_MON" ]; then
+        exit 0
+    fi
+
+    # Teleport JUST the hovered window silently so your mouse stays put
+    hyprctl dispatch movetoworkspacesilent "$TARGET_WS,address:$ACTIVE_WIN"
+fi
+

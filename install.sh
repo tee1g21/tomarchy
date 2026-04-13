@@ -31,6 +31,24 @@ install_custom_bindings() {
     fi
 }
 
+install_spanned_workspaces() {
+    echo "Installing spanned workspaces..."
+
+    ln -sf "$REPO_DIR/.config/hypr/workspaces.conf" "$HOME/.config/hypr/workspaces.conf"
+    ln -sf "$REPO_DIR/.local/bin/spanned-workspaces" "$HOME/.local/bin/spanned-workspaces"
+
+    SOURCE_LINE="source = ~/.config/hypr/workspaces.conf"
+    TARGET_FILE="$HOME/.config/hypr/hyprland.conf"
+
+    if ! grep -qF "$SOURCE_LINE" "$TARGET_FILE"; then
+        echo "" >> "$TARGET_FILE"
+        echo "$SOURCE_LINE" >> "$TARGET_FILE"
+        echo "Successfully added source line to hyprland.conf"
+    else
+        echo "Source line already exists, skipping append."
+    fi
+}
+
 install_custom_hyprlock() {
     echo "Installing custom hyprlock..."
 
@@ -83,6 +101,10 @@ install_custom_waybar() {
     local config_backup="$HOME/.config/waybar/config.jsonc.bak"
     local config_source="$REPO_DIR/.config/waybar/config.jsonc"
 
+    local style_target="$HOME/.config/waybar/style.css"
+    local style_backup="$HOME/.config/waybar/style.css.bak"
+    local style_source="$REPO_DIR/.config/waybar/style.css"
+
     local brightness_target="$HOME/.local/bin/brightness-control"
     local brightness_source="$REPO_DIR/.local/bin/brightness-control"
 
@@ -92,9 +114,18 @@ install_custom_waybar() {
         echo "Original waybar config.jsonc backed up to config.jsonc.bak"
     fi
 
+    # Backup existing style only if it's a real file and no backup exists yet
+    if [ -e "$style_target" ] && [ ! -L "$style_target" ] && [ ! -e "$style_backup" ]; then
+        mv "$style_target" "$style_backup"
+        echo "Original waybar style.css backed up to style.css.bak"
+    fi
+
     # Replace existing symlink/file safely with the managed symlink
     rm -f "$config_target"
     ln -s "$config_source" "$config_target"
+
+    rm -f "$style_target"
+    ln -s "$style_source" "$style_target"
 
     # Link only the latest brightness script
     rm -f "$brightness_target"
@@ -107,6 +138,7 @@ mkdir -p "$HOME/.local/bin"
 #install_custom_menu
 install_theme_toggle
 install_custom_bindings
+install_spanned_workspaces
 install_custom_hyprlock
 install_custom_walker
 install_custom_waybar

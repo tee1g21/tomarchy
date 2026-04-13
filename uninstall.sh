@@ -94,6 +94,8 @@ uninstall_custom_waybar() {
 
     local config_target="$HOME/.config/waybar/config.jsonc"
     local config_backup="$HOME/.config/waybar/config.jsonc.bak"
+    local style_target="$HOME/.config/waybar/style.css"
+    local style_backup="$HOME/.config/waybar/style.css.bak"
     local brightness_target="$HOME/.local/bin/brightness-control"
 
     # Remove config symlink only if it is a symlink
@@ -108,10 +110,47 @@ uninstall_custom_waybar() {
         echo "Restored original waybar config.jsonc from backup."
     fi
 
+    # Remove style symlink only if it is a symlink
+    if [ -L "$style_target" ]; then
+        rm "$style_target"
+        echo "Removed waybar style.css symlink."
+    fi
+
+    # Restore backup style if present and target is absent
+    if [ -e "$style_backup" ] && [ ! -e "$style_target" ]; then
+        mv "$style_backup" "$style_target"
+        echo "Restored original waybar style.css from backup."
+    fi
+
     # Remove brightness script symlink only if it is a symlink
     if [ -L "$brightness_target" ]; then
         rm "$brightness_target"
         echo "Removed brightness-control symlink."
+    fi
+}
+
+uninstall_spanned_workspaces() {
+    local source_file="$HOME/.config/hypr/workspaces.conf"
+    local target_file="$HOME/.config/hypr/hyprland.conf"
+    local source_line="source = ~/.config/hypr/workspaces.conf"
+    local script_target="$HOME/.local/bin/spanned-workspaces"
+
+    echo "Cleaning up spanned workspaces..."
+
+    # Remove the config symlink
+    if [ -L "$source_file" ]; then
+        rm "$source_file"
+    fi
+
+    # Remove the spanned workspaces script symlink
+    if [ -L "$script_target" ]; then
+        rm "$script_target"
+    fi
+
+    # Revert the source line in the main config
+    if [ -f "$target_file" ]; then
+        sed -i "\|$source_line|d" "$target_file"
+        sed -i '${/^$/d;}' "$target_file"
     fi
 }
 
@@ -124,6 +163,7 @@ main() {
     uninstall_custom_hyprlock
     uninstall_custom_walker
     uninstall_custom_waybar
+    uninstall_spanned_workspaces
 
     echo "Tomarchy uninstalled successfully."
 }
