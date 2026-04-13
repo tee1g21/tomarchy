@@ -55,7 +55,7 @@ A tailored Waybar configuration with an updated layout, custom styling (`style.c
 ![custom-brightness](https://github.com/user-attachments/assets/e7ed5e7c-7873-4968-999c-82b15e67909a)
 
 ### Power Profiles Selector
-Power profiles selector included in custom waybar for laptops
+Power profiles selector included in custom Waybar for laptops
 
 ![power-profiles-selector](https://github.com/user-attachments/assets/7a378f53-54cc-4a8d-897f-f97d765c9a8b)
 
