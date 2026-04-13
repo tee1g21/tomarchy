@@ -57,6 +57,8 @@ A tailored Waybar configuration with an updated layout, custom styling (`style.c
 ### Power Profiles Selector
 Power profiles selector included in custom waybar for laptops
 
+![power-profiles-selector](https://github.com/user-attachments/assets/7a378f53-54cc-4a8d-897f-f97d765c9a8b)
+
 ### Custom Hyprlock
 A beautifully customised lock screen that displays the current date, time, and live weather conditions across multiple screen sizes.
 
