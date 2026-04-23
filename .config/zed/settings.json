@@ -1,0 +1,215 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "cli_default_open_behavior": "existing_window",
+  "collaboration_panel": {
+    "dock": "left",
+  },
+  "focus_follows_mouse": {
+    "enabled": false,
+  },
+  "lsp": {
+    "vtsls": {
+      "settings": {
+        "typescript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always",
+          },
+        },
+        "javascript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always",
+          },
+        },
+      },
+      "enable_lsp_tasks": true,
+    },
+  },
+  "diff_view_style": "unified",
+  "relative_line_numbers": "disabled",
+  "gutter": {
+    "min_line_number_digits": 1,
+  },
+  "preview_tabs": {
+    "enable_preview_from_project_panel": true,
+    "enable_preview_from_multibuffer": true,
+    "enable_preview_from_file_finder": true,
+  },
+  "edit_predictions": {
+    "ollama": {
+      "model": "qwen2.5-coder:7b-base",
+    },
+    "mode": "subtle",
+    "provider": "zed",
+  },
+  "outline_panel": {
+    "dock": "left",
+    "folder_icons": true,
+  },
+  "active_pane_modifiers": {
+    "border_size": 0.0,
+  },
+  "agent_buffer_font_size": 12.0,
+  "agent_ui_font_size": 14.0,
+  "toolbar": {
+    "breadcrumbs": true,
+  },
+  "agent_servers": {
+    "opencode": {
+      "type": "registry",
+    },
+    "github-copilot-cli": {
+      "type": "registry",
+    },
+    "gemini": {
+      "type": "registry",
+    },
+  },
+  "agent": {
+    "sidebar_side": "right",
+    "dock": "right",
+    "inline_assistant_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4o",
+      "enable_thinking": false,
+    },
+    "show_turn_stats": false,
+    "single_file_review": true,
+    "default_profile": "ask",
+    "default_model": {
+      "effort": "high",
+      "provider": "copilot_chat",
+      "model": "gpt-5.3-codex",
+      "enable_thinking": false,
+    },
+    "favorite_models": [],
+    "model_parameters": [],
+  },
+  "git": {
+    "inline_blame": {
+      "show_commit_summary": false,
+    },
+    "git_gutter": "tracked_files",
+  },
+  "git_panel": {
+    "dock": "left",
+    "sort_by_path": false,
+    "show_count_badge": true,
+    "folder_icons": true,
+    "file_icons": true,
+    "collapse_untracked_diff": false,
+    "tree_view": true,
+    "status_style": "label_color",
+    "default_width": 360.0,
+  },
+  "terminal": {
+    "dock": "bottom",
+    "toolbar": {
+      "breadcrumbs": false,
+    },
+    "copy_on_select": true,
+    "cursor_shape": "block",
+    "font_size": 12.0,
+    "show_count_badge": true,
+  },
+  "project_panel": {
+    "dock": "left",
+    "button": true,
+    "hide_hidden": false,
+    "hide_root": true,
+    "git_status_indicator": true,
+    "diagnostic_badges": false,
+    "scrollbar": {
+      "horizontal_scroll": true,
+    },
+    "bold_folder_labels": false,
+    "indent_size": 15.0,
+    "folder_icons": true,
+    "entry_spacing": "comfortable",
+  },
+  "bottom_dock_layout": "full",
+  "tab_bar": {
+    "show_nav_history_buttons": true,
+    "show": true,
+    "show_pinned_tabs_in_separate_row": false,
+  },
+  "tabs": {
+    "close_position": "right",
+    "file_icons": false,
+    "git_status": true,
+  },
+  "title_bar": {
+    "show_project_items": true,
+    "button_layout": "platform_default",
+    "show_menus": false,
+  },
+  "use_smartcase_search": true,
+  "colorize_brackets": true,
+  "inlay_hints": {
+    "show_background": false,
+    "enabled": false,
+  },
+  "soft_wrap": "editor_width",
+  "minimap": {
+    "thumb_border": "left_open",
+    "show": "auto",
+  },
+  "which_key": {
+    "enabled": true,
+  },
+  "autosave": {
+    "after_delay": {
+      "milliseconds": 1000,
+    },
+  },
+  "cursor_shape": "bar",
+  "cursor_blink": true,
+  "text_rendering_mode": "platform_default",
+  "ui_font_family": ".SystemUIFont",
+  "buffer_line_height": "standard",
+  "buffer_font_family": "JetBrainsMonoNL Nerd Font Mono",
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false,
+  },
+  "session": {
+    "trust_all_worktrees": true,
+  },
+  "icon_theme": {
+    "mode": "system",
+    "light": "Material Icon Theme",
+    "dark": "Material Icon Theme",
+  },
+  "ui_font_size": 16.0,
+  "buffer_font_size": 12.0,
+  "theme": {
+    "mode": "system",
+    "light": "Flexoki Light",
+    "dark": "Everforest Dark Hard (material)",
+  },
+  "auto_install_extensions": {
+    "codebook": true,
+    "color-highlight": true,
+    "csv": true,
+    "docker-compose": true,
+    "dockerfile": true,
+    "everforest": true,
+    "flexoki-themes": true,
+    "git-firefly": true,
+    "html": true,
+    "hyprlang": true,
+    "make": true,
+    "material-icon-theme": true,
+    "one-dark-pro": true,
+    "opencode": true,
+    "rainbow-csv": true,
+    "sql": true,
+    "xml": true,
+  },
+}
