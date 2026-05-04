@@ -4,14 +4,12 @@ ACTION=$1
 STEP=5
 
 if [ "$ACTION" = "get" ]; then
-    # Use waybar output name to determine the display number
     case "$WAYBAR_OUTPUT_NAME" in
         *"DP-1"*) DISPLAY_NUM=1 ;;
         *"HDMI-A-1"*) DISPLAY_NUM=2 ;;
         *) DISPLAY_NUM=1 ;;
     esac
 else
-    # When user is actively scrolling or clicking, use the cursor position to determine the display number
     CURSOR_X=$(hyprctl cursorpos | awk -F',' '{print $1}')
     if [[ -n "$CURSOR_X" ]] && [ "$CURSOR_X" -lt 0 ]; then
         DISPLAY_NUM=2
@@ -27,20 +25,27 @@ set_brightness_in_background() {
     (ddcutil --display "$DISPLAY_NUM" setvcp 10 "$1") &
 }
 
+show_osd() {
+    local percent=$1
+    local progress="$(awk -v p="$percent" 'BEGIN{printf "%.2f", p/100}')"
+    [[ $progress == "0.00" ]] && progress="0.01"
+
+    swayosd-client \
+      --monitor "$(hyprctl monitors -j | jq -r '.[]|select(.focused==true).name')" \
+      --custom-icon display-brightness \
+      --custom-progress "$progress" \
+      --custom-progress-text "${percent}%"
+}
+
+# Ensure state file exists
 if [ ! -s "$STATE_FILE" ]; then
     initial_brightness=$(ddcutil --display "$DISPLAY_NUM" getvcp 10 -t 2>/dev/null | cut -d ' ' -f 4)
-
-    if [ -z "$initial_brightness" ]; then
-        initial_brightness=50 # Failsafe
-    fi
+    if [ -z "$initial_brightness" ]; then initial_brightness=50; fi
     echo "$initial_brightness" > "$STATE_FILE"
 fi
 
 current=$(cat "$STATE_FILE")
-
-if [ -z "$current" ]; then
-    current=50
-fi
+if [ -z "$current" ]; then current=50; fi
 
 case "$ACTION" in
     "get")
@@ -51,6 +56,7 @@ case "$ACTION" in
         if [ "$current" -ne "$new_brightness" ]; then
             echo "$new_brightness" > "$STATE_FILE"
             set_brightness_in_background "$new_brightness"
+            show_osd "$new_brightness"
         fi
         pkill -RTMIN+8 waybar
         ;;
@@ -59,6 +65,7 @@ case "$ACTION" in
         if [ "$current" -ne "$new_brightness" ]; then
             echo "$new_brightness" > "$STATE_FILE"
             set_brightness_in_background "$new_brightness"
+            show_osd "$new_brightness"
         fi
         pkill -RTMIN+8 waybar
         ;;
